@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title></title>
+	<meta name="generator" content="LibreOffice 24.8.3.2 (Linux)"/>
+	<meta name="created" content="00:00:00"/>
+	<meta name="changed" content="00:00:00"/>
+	<style type="text/css">
+		@page { size: 8.5in 11in; margin: 0.79in }
+		p { line-height: 115%; margin-bottom: 0.1in; background: transparent }
+		pre { background: transparent }
+		pre.western { font-family: "Liberation Mono", monospace; font-size: 10pt }
+		pre.cjk { font-family: "Noto Sans Mono CJK SC", monospace; font-size: 10pt }
+		pre.ctl { font-family: "Liberation Mono", monospace; font-size: 10pt }
+	</style>
+</head>
+<body lang="en-US" link="#000080" vlink="#800000" dir="ltr"><pre class="western">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;GPA Calculator&lt;/title&gt;
+    &lt;style&gt;
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+            text-align: center;
+ }
+        th, td {
+            padding: 10px;
+        }
+        .input-row {
+            margin-bottom: 15px;
+        }
+        .input-row label {
+            margin-right: 10px;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;GPA Calculator&lt;/h1&gt;
+    &lt;form id=&quot;gpaForm&quot;&gt;
+        &lt;div id=&quot;subjectsContainer&quot;&gt;
+            &lt;div class=&quot;input-row&quot;&gt;
+                &lt;label for=&quot;subject1&quot;&gt;Subject 1 Name:&lt;/label&gt;
+                &lt;input type=&quot;text&quot; id=&quot;subject1&quot; name=&quot;subject1&quot; required&gt;
+                &lt;label for=&quot;credit1&quot;&gt;Credit Hours:&lt;/label&gt;
+                &lt;input type=&quot;number&quot; id=&quot;credit1&quot; name=&quot;credit1&quot; min=&quot;1&quot; max=&quot;4&quot; required&gt;
+                &lt;label for=&quot;score1&quot;&gt;Score:&lt;/label&gt;
+ &lt;input type=&quot;number&quot; id=&quot;score1&quot; name=&quot;score1&quot; min=&quot;0&quot; max=&quot;100&quot; 
+required&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;button type=&quot;button&quot; onclick=&quot;addSubject()&quot;&gt;Add Another Subject&lt;/button&gt;
+        &lt;button type=&quot;submit&quot;&gt;Calculate GPA&lt;/button&gt;
+    &lt;/form&gt;
+ &lt;h2&gt;Results&lt;/h2&gt;
+    &lt;table id=&quot;resultsTable&quot;&gt;
+        &lt;thead&gt;
+            &lt;tr&gt;
+                &lt;th&gt;Subject&lt;/th&gt;
+                &lt;th&gt;Credit Hours&lt;/th&gt;
+                &lt;th&gt;Score&lt;/th&gt;
+                &lt;th&gt;Grade&lt;/th&gt;
+                &lt;th&gt;Point&lt;/th&gt;
+            &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+        &lt;/tbody&gt;
+    &lt;/table&gt;
+    &lt;h3 id=&quot;gpaResult&quot;&gt;&lt;/h3&gt;
+
+    &lt;script&gt;
+        let subjectCount = 1;
+
+        function addSubject() {
+            subjectCount++;
+            const container = document.getElementById('subjectsContainer');
+const div = document.createElement('div');
+            div.className = 'input-row';
+            div.innerHTML = `
+                &lt;label for=&quot;subject${subjectCount}&quot;&gt;Subject ${subjectCount} Name:&lt;/label&gt;
+                &lt;input type=&quot;text&quot; id=&quot;subject${subjectCount}&quot; name=&quot;subject${subjectCount}&quot; required&gt;
+                &lt;label for=&quot;credit${subjectCount}&quot;&gt;Credit Hours:&lt;/label&gt;
+                &lt;input type=&quot;number&quot; id=&quot;credit${subjectCount}&quot; name=&quot;credit${subjectCount}&quot; min=&quot;1&quot; max=&quot;4&quot; required&gt;
+                &lt;label for=&quot;score${subjectCount}&quot;&gt;Score:&lt;/label&gt;
+                &lt;input type=&quot;number&quot; id=&quot;score${subjectCount}&quot; name=&quot;score${subjectCount}&quot; min=&quot;0&quot; max=&quot;100&quot; required&gt;
+            `;
+            container.appendChild(div);
+        }
+
+        function calculateGrade(score) {
+            if (score &gt;= 80) return { grade: &quot;A&quot;, point: 4.0 };
+            if (score &gt;= 75) return { grade: &quot;A-&quot;, point: 3.7 };
+            if (score &gt;= 70) return { grade: &quot;B+&quot;, point: 3.3 };
+            if (score &gt;= 65) return { grade: &quot;B&quot;, point: 3.0 };
+            if (score &gt;= 60) return { grade: &quot;B-&quot;, point: 2.7 };
+            if (score &gt;= 55) return { grade: &quot;C+&quot;, point: 2.3 };
+            if (score &gt;= 50) return { grade: &quot;C&quot;, point: 2.0 };
+ if (score &gt;= 45) return { grade: &quot;C-&quot;, point: 1.7 };
+            if (score &gt;= 40) return { grade: &quot;D&quot;, point: 1.0 };
+            return { grade: &quot;F&quot;, point: 0.0 };
+        }
+
+        document.getElementById('gpaForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const resultsTable = document.getElementById('resultsTable').querySelector('tbody');
+            resultsTable.innerHTML = '';
+
+            let totalQualityPoints = 0;
+            let totalCredits = 0;
+
+            for (let i = 1; i &lt;= subjectCount; i++) {
+                const subject = document.getElementById(subject${i}).value;
+                const credit = parseInt(document.getElementById(credit${i}).value);
+                const score = parseFloat(document.getElementById(score${i}).value);
+
+                if (!subject || isNaN(credit) || isNaN(score)) {
+                    alert(Please fill out all fields for Subject ${i});
+                    return;
+                }
+ const { grade, point } = calculateGrade(score);
+
+                totalQualityPoints += point * credit;
+                totalCredits += credit;
+
+                const row = `&lt;tr&gt;
+                    &lt;td&gt;${subject}&lt;/td&gt;
+                    &lt;td&gt;${credit}&lt;/td&gt;
+                    &lt;td&gt;${score}&lt;/td&gt;
+                    &lt;td&gt;${grade}&lt;/td&gt;
+                    &lt;td&gt;${point.toFixed(2)}&lt;/td&gt;
+                &lt;/tr&gt;`;
+                resultsTable.innerHTML += row;
+            }
+
+            const gpa = totalQualityPoints / totalCredits;
+            document.getElementById('gpaResult').innerText = Your GPA is: ${gpa.toFixed(2)};
+        });
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+</body>
+</html>
