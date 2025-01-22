@@ -1,0 +1,118 @@
+#include <iostream>
+#include <string>
+#include <iomanip>
+
+using namespace std;
+
+// Function to validate user input for integer range
+int validateInputInt(const string &prompt, int min, int max) {
+    int value;
+    while (true) {
+        cout << prompt;
+        cin >> value;
+        if (cin.fail() || value < min || value > max) {
+            cin.clear();
+
+            cout << "Invalid input! Please enter a number between " << min << " and " << max << ".\n";
+        } else {
+            cin.ignore(); // Clear the input buffer
+            return value;
+        }
+    }
+}
+
+// Function to calculate grades and grade points based on score
+void calculateGrade(float score, string &grade, float &point) {
+    if (score >= 80) { grade = "A"; point = 4.0; }
+    else if (score >= 75) { grade = "A-"; point = 3.7; }
+    else if (score >= 70) { grade = "B+"; point = 3.3; }
+    else if (score >= 65) { grade = "B"; point = 3.0; }
+    else if (score >= 60) { grade = "B-"; point = 2.7; }
+    else if (score >= 55) { grade = "C+"; point = 2.3; }
+    else if (score >= 50) { grade = "C"; point = 2.0; }
+    else if (score >= 45) { grade = "C-"; point = 1.7; }
+    else if (score >= 40) { grade = "D"; point = 1.0; }
+  else { grade = "F"; point = 0.0; }
+}
+
+// Function to display results in a table format
+void displayResults(string subjects[], int credits[], float scores[], string grades[], float points[], int numSubjects, float gpa) {
+    int maxSubjectLength = 15; // Determine max subject length for table formatting
+    for (int i = 0; i < numSubjects; ++i) {
+        if (subjects[i].length() > maxSubjectLength) maxSubjectLength = subjects[i].length();
+    }
+
+    cout << "\n=========================================================" << endl;
+    cout << "INDEX\tSUBJECT" << string(maxSubjectLength - 7, ' ')
+         << "CREDIT\tSCORE\tGRADE\tPOINT" << endl;
+ cout << "=========================================================" << endl;
+
+    for (int i = 0; i < numSubjects; ++i) {
+        cout << left << setw(8) << (i + 1)
+             << left << setw(maxSubjectLength + 2) << subjects[i]
+             << right << setw(8) << credits[i]
+             << right << setw(8) << scores[i]
+             << left << setw(8) << grades[i]
+             << fixed << setprecision(2) << points[i] << endl;
+    }
+
+    cout << "=========================================================" << endl;
+    cout << "GPA: " << fixed << setprecision(2) << gpa << endl;
+}
+
+// Main program
+int main() {
+    cout << "======================================== " << endl;
+    cout << " Program: GPA CALCULATOR" << endl;
+    cout << " Author : [UTeM Santos]" << endl;
+    cout << "======================================== \n" << endl;
+
+ // Get the number of subjects from the user
+    int numSubjects = validateInputInt("Enter the number of subjects: ", 1, 100);
+
+    // Declare arrays to store data dynamically
+    string subjects[100];
+    int credits[100];
+    float scores[100];
+    string grades[100];
+    float points[100];
+
+    // Input subject details
+    for (int i = 0; i < numSubjects; ++i) {
+        cout << "\nEnter details for subject " << (i + 1) << ":" << endl;
+
+        cout << "Name of Subject: ";
+        cin.ignore();
+        getline(cin, subjects[i]);
+ if (subjects[i].empty()) {
+            cout << "Subject name cannot be empty! Please enter again." << endl;
+            --i; // Retry the same iteration
+            continue;
+        }
+
+        credits[i] = validateInputInt("Credit Hours (1-4): ", 1, 4);
+        scores[i] = validateInputInt("Total Score (0-100): ", 0, 100);
+
+        calculateGrade(scores[i], grades[i], points[i]);
+    }
+
+    // Calculate total quality points and GPA
+    float totalQualityPoints = 0;
+    int totalCredits = 0;
+
+    for (int i = 0; i < numSubjects; ++i) {
+        totalQualityPoints += points[i] * credits[i];
+        totalCredits += credits[i];
+    }
+ if (totalCredits == 0) {
+        cout << "Error: Total credits cannot be zero. GPA calculation is not possible." << endl;
+        return 1;
+    }
+
+    float gpa = totalQualityPoints / totalCredits;
+
+    // Display results
+    displayResults(subjects, credits, scores, grades, points, numSubjects, gpa);
+
+    return 0;
+}
